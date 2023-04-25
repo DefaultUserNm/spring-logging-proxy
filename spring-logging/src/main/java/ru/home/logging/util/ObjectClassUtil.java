@@ -18,7 +18,7 @@ import static java.util.function.UnaryOperator.identity;
  * @author alexander
  */
 @UtilityClass
-public class ObjectClassUtil {
+class ObjectClassUtil {
     public static Constructor<?> getConstructor(Object bean) {
         Constructor<?> result = getNoArgsConstructor(bean);
         if (result != null) {

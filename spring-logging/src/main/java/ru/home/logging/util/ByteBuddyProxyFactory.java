@@ -12,8 +12,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Set;
 
-import static net.bytebuddy.matcher.ElementMatchers.anyOf;
-import static net.bytebuddy.matcher.ElementMatchers.isDeclaredBy;
+import static net.bytebuddy.matcher.ElementMatchers.isFinal;
 import static net.bytebuddy.matcher.ElementMatchers.isPrivate;
 import static net.bytebuddy.matcher.ElementMatchers.not;
 import static ru.home.logging.util.ObjectClassUtil.chooseConstructor;
@@ -24,10 +23,11 @@ import static ru.home.logging.util.ObjectClassUtil.getConstructorFields;
  * @author alexander
  */
 @RequiredArgsConstructor
-public class ByteBuddyProxyFactory implements ProxyFactory {
+class ByteBuddyProxyFactory implements ProxyFactory {
 
     private final Object bean;
     private final Class<?> originalClass;
+    private final Object delegate;
     private final Set<Method> methods;
 
     @Override
@@ -36,7 +36,7 @@ public class ByteBuddyProxyFactory implements ProxyFactory {
         Constructor<?>[] constructors = new ByteBuddy()
                 .subclass(originalClass)
                 .method(buildMethodMatcher())
-                .intercept(MethodDelegation.to(new LoggingMethodDelegator(bean)))
+                .intercept(MethodDelegation.to(delegate))
                 .make()
                 .load(originalClass.getClassLoader())
                 .getLoaded()
@@ -49,10 +49,22 @@ public class ByteBuddyProxyFactory implements ProxyFactory {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private ElementMatcher<? super MethodDescription> buildMethodMatcher() {
-        Junction byMethodsMatcher = methods == null
-                ? isDeclaredBy(originalClass)
-                : anyOf(methods);
+        ElementMatcher<? extends MethodDescription> methodMatcher = description -> {
+            for (Method method : methods) {
+                if (description.represents(method)) {
+                    return true;
+                }
+            }
+            return false;
+        };
 
-        return not(isPrivate()).and(byMethodsMatcher);
+        Junction result = not(isPrivate())
+                .and(not(isFinal()));
+
+        if (methods != null) {
+            result = result.and(methodMatcher);
+        }
+
+        return result;
     }
 }

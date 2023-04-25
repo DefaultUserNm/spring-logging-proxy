@@ -10,17 +10,28 @@ import java.lang.reflect.Proxy;
  * @author alexander
  */
 @RequiredArgsConstructor
-public class JdkProxyFactory implements ProxyFactory {
+class JdkProxyFactory implements ProxyFactory {
 
+    private final Object bean;
     private final Class<?> originalClass;
     private final InvocationHandler handler;
+    private final MethodSelector methodSelector;
 
     @Override
     public Object createProxy() {
         return Proxy.newProxyInstance(
                 originalClass.getClassLoader(),
                 originalClass.getInterfaces(),
-                handler
+                buildInvocationHandler()
         );
+    }
+
+    private InvocationHandler buildInvocationHandler() {
+        return (proxy, method, args) -> {
+            if (methodSelector.matches(method)) {
+                return handler.invoke(bean, method, args);
+            }
+            return method.invoke(bean, args);
+        };
     }
 }

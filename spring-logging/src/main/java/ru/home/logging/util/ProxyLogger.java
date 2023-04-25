@@ -12,7 +12,7 @@ import static org.apache.commons.lang3.exception.ExceptionUtils.getStackTrace;
  */
 @Slf4j
 public class ProxyLogger {
-    public static void logBefore(Class<?> originalClass, Method method, Object[] args) {
+    static void logBefore(Class<?> originalClass, Method method, Object[] args) {
         log.info(
                 "Invoking {}#{} with args {}",
                 originalClass.getCanonicalName(),
@@ -21,7 +21,7 @@ public class ProxyLogger {
         );
     }
 
-    public static void logAfter(Class<?> originalClass, Method method, Object result) {
+    static void logAfter(Class<?> originalClass, Method method, Object result) {
         log.info(
                 "Method {}#{} invocation result: {}",
                 originalClass.getCanonicalName(),
@@ -30,7 +30,7 @@ public class ProxyLogger {
         );
     }
 
-    public static void logAfterThrowing(Class<?> originalClass, Method method, Exception ex) {
+    static void logAfterThrowing(Class<?> originalClass, Method method, Exception ex) {
         log.info(
                 "Method {}#{} invocation failed with exception: {}",
                 originalClass.getCanonicalName(),

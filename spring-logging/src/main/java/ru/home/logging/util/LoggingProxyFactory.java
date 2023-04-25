@@ -4,7 +4,6 @@ import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import ru.home.logging.model.LoggedClassData;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.Optional;
@@ -41,10 +40,13 @@ public class LoggingProxyFactory {
     private Object createJdkDynamicProxy(Object bean, LoggedClassData data) {
         Set<String> methods = buildMethodKeys(data.getMethods());
         ProxyFactory proxyFactory = new JdkProxyFactory(
+                bean,
                 data.getClazz(),
+                (proxy, method, args) -> invokeWithLogging(bean, data.getClass(), method, args),
                 methods.isEmpty()
-                        ? (proxy, method, args) -> invoke(bean, data.getClazz(), method, args)
-                        : (proxy, method, args) -> invoke(bean, data.getClazz(), method, args, methods)
+                        ? method -> true
+                        : method -> methods.contains(calculateKey(method))
+
         );
 
         return proxyFactory.createProxy();
@@ -55,9 +57,10 @@ public class LoggingProxyFactory {
         ProxyFactory proxyFactory = new CGLibProxyFactory(
                 bean,
                 data.getClazz(),
+                (obj, method, args, proxy) -> invokeWithLogging(bean, data.getClass(), method, args),
                 methods.isEmpty()
-                        ? (obj, method, args, proxy) -> invoke(bean, data.getClazz(), method, args)
-                        : (obj, method, args, proxy) -> invoke(bean, data.getClazz(), method, args, methods)
+                        ? method -> true
+                        : method -> methods.contains(calculateKey(method))
         );
 
         return proxyFactory.createProxy();
@@ -65,24 +68,13 @@ public class LoggingProxyFactory {
 
     private Object createByteBuddyProxy(Object bean, LoggedClassData data) {
         ProxyFactory proxyFactory = new ByteBuddyProxyFactory(
-                bean, data.getClazz(), data.getMethods()
+                bean,
+                data.getClazz(),
+                new LoggingMethodDelegator(bean),
+                data.getMethods()
         );
 
         return proxyFactory.createProxy();
-    }
-
-    private Object invoke(Object bean, Class<?> originalClass, Method method, Object[] args)
-            throws IllegalAccessException, InvocationTargetException {
-        return invokeWithLogging(bean, originalClass, method, args);
-    }
-
-    private Object invoke(Object bean, Class<?> originalClass, Method method, Object[] args, Set<String> methods)
-            throws IllegalAccessException, InvocationTargetException {
-        if (methods.contains(calculateKey(method))) {
-            return invoke(bean, originalClass, method, args);
-        } else {
-            return method.invoke(bean, args);
-        }
     }
 
     private Set<String> buildMethodKeys(Set<Method> methods) {

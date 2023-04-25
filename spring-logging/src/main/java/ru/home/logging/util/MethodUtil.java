@@ -9,8 +9,8 @@ import java.lang.reflect.Method;
  * @author alexander
  */
 @UtilityClass
-public class MethodUtil {
-    public static String calculateKey(Method method) {
+class MethodUtil {
+    static String calculateKey(Method method) {
         return method.getName() + "#" + method.getParameterCount();
     }
 }

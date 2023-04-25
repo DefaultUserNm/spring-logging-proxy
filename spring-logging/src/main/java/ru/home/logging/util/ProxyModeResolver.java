@@ -29,15 +29,23 @@ public class ProxyModeResolver {
         ProxyMode result;
         ProxyMode suggested = data.getMode();
         if (suggested == null || suggested == DEFAULT || suggested == BYTE_BUDDY) {
-            result = BYTE_BUDDY;
-        } else if (suggested == JDK && canUseJdkProxy(data.getClazz())) {
-            result = JDK;
+            result = getDefault();
+        } else if (suggested == JDK ) {
+            if (canUseJdkProxy(data.getClazz())) {
+                result = JDK;
+            } else {
+                result = getDefault();
+            }
         } else {
             result = CGLIB;
         }
         log.debug("Using {} proxy mode for {}", result, data.getClazz().getCanonicalName());
 
         return result;
+    }
+
+    private ProxyMode getDefault() {
+        return BYTE_BUDDY;
     }
 
     private boolean canUseJdkProxy(Class<?> beanClass) {

@@ -12,20 +12,30 @@ import static ru.home.logging.util.ObjectClassUtil.getConstructorFields;
  * @author alexander
  */
 @RequiredArgsConstructor
-public class CGLibProxyFactory implements ProxyFactory {
+class CGLibProxyFactory implements ProxyFactory {
 
     private final Object bean;
     private final Class<?> originalClass;
     private final MethodInterceptor interceptor;
+    private final MethodSelector methodSelector;
 
     @Override
     public Object createProxy() {
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(originalClass);
-        enhancer.setCallback(interceptor);
+        enhancer.setCallback(buildMethodInterceptor());
         Class<?>[] argumentTypes = getConstructor(bean).getParameterTypes();
         Object[] constructorFields = getConstructorFields(bean, originalClass, argumentTypes);
 
         return enhancer.create(argumentTypes, constructorFields);
+    }
+
+    private MethodInterceptor buildMethodInterceptor() {
+        return (obj, method, args, proxy) -> {
+            if (methodSelector.matches(method)) {
+                return interceptor.intercept(bean, method, args, proxy);
+            }
+            return method.invoke(bean, args);
+        };
     }
 }
