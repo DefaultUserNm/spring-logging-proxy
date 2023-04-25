@@ -9,8 +9,6 @@ dependencies {
     // code processing
     implementation libs.lombok
     annotationProcessor libs.lombok
-    implementation libs.mapstruct
-    annotationProcessor libs.mapstruct
 
     // utils
     implementation libs.apacheCommonsLang
