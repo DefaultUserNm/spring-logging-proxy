@@ -51,15 +51,16 @@ public class LoggingConfigurerBeanPostProcessor implements BeanPostProcessor {
         log.trace("Post processing bean '{}' - {} after initialization",
                 beanName, bean.getClass().getCanonicalName());
 
+        Object result = bean;
         LoggedClassData data = beanNamesMap.get(beanName);
         if (data != null) {
             log.debug("Creating logging proxy for bean '{}' - {}", beanName, bean.getClass().getCanonicalName());
-            return createProxy(bean, data);
+            result = createProxy(bean, data);
         }
         log.trace("Finished post processing bean '{}' - {} after initialization",
                 beanName, bean.getClass().getCanonicalName());
 
-        return bean;
+        return result;
     }
 
     /**
