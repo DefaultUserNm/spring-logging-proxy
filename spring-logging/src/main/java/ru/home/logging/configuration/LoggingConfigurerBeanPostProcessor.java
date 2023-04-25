@@ -9,6 +9,7 @@ import ru.home.logging.model.ProxyMode;
 import ru.home.logging.util.ProxyModeResolver;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -108,18 +109,34 @@ public class LoggingConfigurerBeanPostProcessor implements BeanPostProcessor {
      */
     private Set<Method> extractLoggedMethods(Object bean) {
         Set<Method> methods = new HashSet<>();
-        for (Method method : bean.getClass().getDeclaredMethods()) {
+        for (Method method : extractMethods(bean)) {
             if (method.isAnnotationPresent(Logged.class)) {
                 log.debug(
                         "Method {} in class {} has @Logged annotation",
                         method,
-                        bean.getClass().getCanonicalName()
+                        method.getDeclaringClass()
                 );
                 methods.add(method);
             }
         }
 
         return methods;
+    }
+
+    /**
+     * Get methods declared in current bean class or its superclasses
+     * @param bean spring bean currently being processed
+     * @return methods
+     */
+    private Set<Method> extractMethods(Object bean) {
+        Set<Method> result = new HashSet<>();
+        Class<?> current = bean.getClass();
+        while (current != Object.class) {
+            result.addAll(Arrays.asList(current.getDeclaredMethods()));
+            current = current.getSuperclass();
+        }
+
+        return result;
     }
 
     /**

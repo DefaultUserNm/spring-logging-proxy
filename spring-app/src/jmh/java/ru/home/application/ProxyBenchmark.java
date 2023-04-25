@@ -69,9 +69,9 @@ public class ProxyBenchmark {
                     LoggedClassData.builder()
                             .clazz(TestObjectImpl.class)
                             .mode(mode)
-                            /*.methods(Set.of(
+                            .methods(Set.of(
                                     TestObjectImpl.class.getMethod("executeTest")
-                            ))*/
+                            ))
                             .build()
             );
         } catch (Exception ex) {

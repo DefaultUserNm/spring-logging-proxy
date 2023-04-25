@@ -14,6 +14,7 @@ import java.util.Set;
 
 import static net.bytebuddy.matcher.ElementMatchers.isFinal;
 import static net.bytebuddy.matcher.ElementMatchers.isPrivate;
+import static net.bytebuddy.matcher.ElementMatchers.isStatic;
 import static net.bytebuddy.matcher.ElementMatchers.not;
 import static ru.home.logging.util.ObjectClassUtil.chooseConstructor;
 import static ru.home.logging.util.ObjectClassUtil.getConstructorFields;
@@ -59,7 +60,8 @@ class ByteBuddyProxyFactory implements ProxyFactory {
         };
 
         Junction result = not(isPrivate())
-                .and(not(isFinal()));
+                .and(not(isFinal()))
+                .and(not(isStatic()));
 
         if (methods != null) {
             result = result.and(methodMatcher);
