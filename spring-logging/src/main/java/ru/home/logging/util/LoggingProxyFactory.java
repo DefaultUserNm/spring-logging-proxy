@@ -11,8 +11,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.exception.ExceptionUtils.getStackTrace;
-import static ru.home.logging.util.LoggingMethodDelegator.invokeWithLogging;
 import static ru.home.logging.util.MethodUtil.calculateKey;
+import static ru.home.logging.util.ProxyInvoker.invokeWithLogging;
 
 /*
  * @created 13.04.2023
