@@ -77,7 +77,7 @@ public class LoggingConfigurerBeanPostProcessor implements BeanPostProcessor {
         );
         LoggedClassData data = LoggedClassData.builder()
                 .mode(ProxyModeResolver.getProxyMode(classAnnotation))
-                .clazz(bean.getClass())
+                .originalClass(bean.getClass())
                 .build();
         beanNamesMap.put(beanName, data);
     }
@@ -97,7 +97,7 @@ public class LoggingConfigurerBeanPostProcessor implements BeanPostProcessor {
         );
         LoggedClassData data = LoggedClassData.builder()
                 .mode(resolveProxyMode(methods))
-                .clazz(bean.getClass())
+                .originalClass(bean.getClass())
                 .methods(methods)
                 .build();
         beanNamesMap.put(beanName, data);

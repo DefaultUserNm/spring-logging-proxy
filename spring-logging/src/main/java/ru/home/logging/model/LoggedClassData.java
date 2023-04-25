@@ -16,7 +16,7 @@ import java.util.Set;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class LoggedClassData {
-    Class<?> clazz;
+    Class<?> originalClass;
     ProxyMode mode;
     Set<Method> methods;
 }

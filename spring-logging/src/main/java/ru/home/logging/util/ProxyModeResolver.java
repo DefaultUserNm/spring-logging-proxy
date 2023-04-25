@@ -31,7 +31,7 @@ public class ProxyModeResolver {
         if (suggested == null || suggested == DEFAULT || suggested == BYTE_BUDDY) {
             result = getDefault();
         } else if (suggested == JDK ) {
-            if (canUseJdkProxy(data.getClazz())) {
+            if (canUseJdkProxy(data.getOriginalClass())) {
                 result = JDK;
             } else {
                 result = getDefault();
@@ -39,7 +39,7 @@ public class ProxyModeResolver {
         } else {
             result = CGLIB;
         }
-        log.debug("Using {} proxy mode for {}", result, data.getClazz().getCanonicalName());
+        log.debug("Using {} proxy mode for {}", result, data.getOriginalClass().getCanonicalName());
 
         return result;
     }

@@ -41,7 +41,7 @@ public class LoggingProxyFactory {
         Set<String> methods = buildMethodKeys(data.getMethods());
         ProxyFactory proxyFactory = new JdkProxyFactory(
                 bean,
-                data.getClazz(),
+                data.getOriginalClass(),
                 (proxy, method, args) -> invokeWithLogging(bean, data.getClass(), method, args),
                 methods.isEmpty()
                         ? method -> true
@@ -56,7 +56,7 @@ public class LoggingProxyFactory {
         Set<String> methods = buildMethodKeys(data.getMethods());
         ProxyFactory proxyFactory = new CGLibProxyFactory(
                 bean,
-                data.getClazz(),
+                data.getOriginalClass(),
                 (obj, method, args, proxy) -> invokeWithLogging(bean, data.getClass(), method, args),
                 methods.isEmpty()
                         ? method -> true
@@ -69,7 +69,7 @@ public class LoggingProxyFactory {
     private Object createByteBuddyProxy(Object bean, LoggedClassData data) {
         ProxyFactory proxyFactory = new ByteBuddyProxyFactory(
                 bean,
-                data.getClazz(),
+                data.getOriginalClass(),
                 new LoggingMethodDelegator(bean),
                 data.getMethods()
         );
