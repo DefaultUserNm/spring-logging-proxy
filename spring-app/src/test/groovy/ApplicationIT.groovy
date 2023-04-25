@@ -1,4 +1,4 @@
-package ru.home.application
+
 
 import org.springframework.boot.test.context.SpringBootTest
 import spock.lang.Specification

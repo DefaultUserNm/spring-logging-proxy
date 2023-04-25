@@ -1,5 +1,6 @@
 logging:
   level:
+    root: ${LOG_LEVEL:-INFO}
     ru.home: DEBUG
 
 logbook:

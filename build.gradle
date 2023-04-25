@@ -3,6 +3,7 @@ plugins {
     id 'groovy'
     id 'org.springframework.boot' version "${springBootVersion}"
     id 'io.spring.dependency-management' version "${springDependencyPluginVersion}"
+    id "me.champeau.jmh" version "0.7.1"
 }
 
 bootJar {
@@ -48,6 +49,12 @@ allprojects {
                 '-Amapstruct.unmappedTargetPolicy=IGNORE'
         ]
     }
+
+    tasks.withType(JavaCompile).tap {
+        configureEach {
+            options.release = 17
+        }
+    }
 }
 
 subprojects {
@@ -56,12 +63,16 @@ subprojects {
         plugin("groovy")
         plugin("org.springframework.boot")
         plugin("io.spring.dependency-management")
+        plugin("me.champeau.jmh")
     }
 
     dependencies {
         implementation libs.springBootStarterTest
         testImplementation "org.spockframework:spock-core:${spockVersion}"
         testImplementation "org.spockframework:spock-spring:${spockVersion}"
+        testImplementation "org.openjdk.jmh:jmh-core:${jmhVersion}"
+        testImplementation "org.openjdk.jmh:jmh-generator-annprocess:${jmhVersion}"
+        jmhAnnotationProcessor "org.openjdk.jmh:jmh-generator-annprocess:${jmhVersion}"
     }
 
     test {
