@@ -1,0 +1,19 @@
+logging:
+  level:
+    ru.home: DEBUG
+
+logbook:
+  filter:
+    enabled: true
+  exclude:
+    - /actuator/**
+    - /v3/api-docs**
+    - /swagger-ui/**
+    - /favicon.ico
+  secure-filter:
+    enabled: false
+  obfuscate:
+    headers:
+      - Authorization
+  format:
+    style: http

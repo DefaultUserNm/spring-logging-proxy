@@ -1,0 +1,3 @@
+rootProject.name = 'spring-logging-proxy'
+include 'spring-logging'
+include 'spring-app'

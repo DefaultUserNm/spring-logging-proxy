@@ -1,0 +1,21 @@
+bootJar {
+    enabled = false
+}
+
+dependencies {
+    // spring boot
+    implementation libs.springBootStarter
+
+    // code processing
+    implementation libs.lombok
+    annotationProcessor libs.lombok
+    implementation libs.mapstruct
+    annotationProcessor libs.mapstruct
+
+    // utils
+    implementation libs.apacheCommonsLang
+    implementation libs.logbookSpringBootStarter
+
+    // code manipulation
+    implementation libs.byteBuddy
+}

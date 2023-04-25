@@ -1,0 +1,70 @@
+plugins {
+    id 'java'
+    id 'groovy'
+    id 'org.springframework.boot' version "${springBootVersion}"
+    id 'io.spring.dependency-management' version "${springDependencyPluginVersion}"
+}
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = false
+}
+
+allprojects {
+    group = "${projectBasePackage}"
+    version = "${projectVersion}"
+
+    repositories {
+        mavenCentral()
+    }
+
+    ext.libs = [
+        'springBootStarter': 'org.springframework.boot:spring-boot-starter',
+        'springBootStarterWeb': 'org.springframework.boot:spring-boot-starter-web',
+        'springBootConfigurationProcessor': 'org.springframework.boot:spring-boot-configuration-processor',
+        'springBootStarterJpa': 'org.springframework.boot:spring-boot-starter-data-jpa',
+        'springBootStarterValidation': 'org.springframework.boot:spring-boot-starter-validation',
+        'springKafka': 'org.springframework.kafka:spring-kafka',
+        'springBootStarterTest': 'org.springframework.boot:spring-boot-starter-test',
+
+        'h2': 'com.h2database:h2',
+
+        'lombok': "org.projectlombok:lombok:${lombokVersion}",
+        'mapstruct': "org.mapstruct:mapstruct:${mapstructVersion}",
+
+        'apacheCommonsLang': "org.apache.commons:commons-lang3:${apacheCommonsLangVersion}",
+
+        'logbookSpringBootStarter': "org.zalando:logbook-spring-boot-starter:${logbookVersion}",
+
+        'byteBuddy': "net.bytebuddy:byte-buddy:${byteBuddyVersion}"
+    ]
+
+    compileJava {
+        options.compilerArgs += [
+                '-Amapstruct.defaultComponentModel=spring',
+                '-Amapstruct.unmappedTargetPolicy=IGNORE'
+        ]
+    }
+}
+
+subprojects {
+    apply {
+        plugin("java")
+        plugin("groovy")
+        plugin("org.springframework.boot")
+        plugin("io.spring.dependency-management")
+    }
+
+    dependencies {
+        implementation libs.springBootStarterTest
+        testImplementation "org.spockframework:spock-core:${spockVersion}"
+        testImplementation "org.spockframework:spock-spring:${spockVersion}"
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+}

@@ -1,0 +1,26 @@
+dependencies {
+    // internal
+    implementation project(':spring-logging')
+
+    // spring boot
+    implementation libs.springBootStarterWeb
+    implementation libs.springBootConfigurationProcessor
+    implementation libs.springBootStarterJpa
+    implementation libs.springBootStarterValidation
+
+    // db
+    implementation libs.h2
+
+    // code processing
+    implementation libs.lombok
+    annotationProcessor libs.lombok
+    implementation libs.mapstruct
+    annotationProcessor libs.mapstruct
+
+    // kafka
+    implementation libs.springKafka
+
+    // utils
+    implementation libs.apacheCommonsLang
+}
+
