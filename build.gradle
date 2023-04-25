@@ -4,6 +4,7 @@ plugins {
     id 'org.springframework.boot' version "${springBootVersion}"
     id 'io.spring.dependency-management' version "${springDependencyPluginVersion}"
     id "me.champeau.jmh" version "${jmhPluginVersion}"
+    id "com.adarshr.test-logger" version "${testsLoggerPluginVersion}"
 }
 
 bootJar {
@@ -64,6 +65,7 @@ subprojects {
         plugin("org.springframework.boot")
         plugin("io.spring.dependency-management")
         plugin("me.champeau.jmh")
+        plugin("com.adarshr.test-logger")
     }
 
     dependencies {
