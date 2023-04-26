@@ -50,20 +50,19 @@ class ByteBuddyProxyFactory implements ProxyFactory {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private ElementMatcher<? super MethodDescription> buildMethodMatcher() {
-        ElementMatcher<? extends MethodDescription> methodMatcher = description -> {
-            for (Method method : methods) {
-                if (description.represents(method)) {
-                    return true;
-                }
-            }
-            return false;
-        };
-
         Junction result = not(isPrivate())
                 .and(not(isFinal()))
                 .and(not(isStatic()));
 
         if (methods != null) {
+            ElementMatcher<? extends MethodDescription> methodMatcher = description -> {
+                for (Method method : methods) {
+                    if (description.represents(method)) {
+                        return true;
+                    }
+                }
+                return false;
+            };
             result = result.and(methodMatcher);
         }
 
