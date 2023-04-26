@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static ru.home.logging.model.ProxyMode.DEFAULT;
 import static ru.home.logging.util.LoggingProxyFactory.createProxy;
 
 /*
@@ -146,11 +147,11 @@ public class LoggingConfigurerBeanPostProcessor implements BeanPostProcessor {
      * @return class proxy mode
      */
     private ProxyMode resolveProxyMode(Set<Method> methods) {
-        ProxyMode proxyMode = null;
+        ProxyMode proxyMode = DEFAULT;
         for (Method method : methods) {
             Logged annotation = method.getAnnotation(Logged.class);
             ProxyMode currentMode = ProxyModeResolver.getProxyMode(annotation);
-            if (proxyMode != null) {
+            if (proxyMode != DEFAULT && currentMode != DEFAULT) {
                 if (proxyMode != currentMode) {
                     log.warn(
                             "Method {} in class {} must have the same proxyMode in Logged annotation as " +

@@ -67,7 +67,7 @@ public class ProxyBenchmark {
             return (TestObject) LoggingProxyFactory.createProxy(
                     object,
                     LoggedClassData.builder()
-                            .clazz(TestObjectImpl.class)
+                            .originalClass(TestObjectImpl.class)
                             .mode(mode)
                             .methods(Set.of(
                                     TestObjectImpl.class.getMethod("executeTest")

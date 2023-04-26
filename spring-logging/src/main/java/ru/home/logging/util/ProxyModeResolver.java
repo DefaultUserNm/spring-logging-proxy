@@ -28,8 +28,10 @@ public class ProxyModeResolver {
     public static ProxyMode resolve(LoggedClassData data) {
         ProxyMode result;
         ProxyMode suggested = data.getMode();
-        if (suggested == null || suggested == DEFAULT || suggested == BYTE_BUDDY) {
+        if (suggested == null || suggested == DEFAULT) {
             result = getDefault();
+        } else if (suggested == BYTE_BUDDY) {
+            result = BYTE_BUDDY;
         } else if (suggested == JDK ) {
             if (canUseJdkProxy(data.getOriginalClass())) {
                 result = JDK;
