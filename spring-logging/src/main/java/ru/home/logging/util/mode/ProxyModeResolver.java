@@ -48,7 +48,6 @@ public class ProxyModeResolver {
 
     private List<ProxyMode> getModes() {
         return stream(ProxyMode.values())
-                .filter(m -> m.getPriority() != null)
                 .sorted(Comparator.comparing(ProxyMode::getPriority))
                 .toList();
     }

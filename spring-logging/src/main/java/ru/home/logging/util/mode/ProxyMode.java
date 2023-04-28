@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import ru.home.logging.model.LoggedClassData;
 
+import static java.lang.Integer.MAX_VALUE;
+
 /*
  * @created 15.04.2023
  * @author alexander
@@ -11,7 +13,7 @@ import ru.home.logging.model.LoggedClassData;
 @Getter
 @RequiredArgsConstructor
 public enum ProxyMode {
-    DEFAULT(null, new DefaultProxyModeValidator()),
+    DEFAULT(MAX_VALUE, new DefaultProxyModeValidator()),
     JDK(1, new JdkProxyModeValidator()),
     CGLIB(2, new CglibProxyModeValidator()),
     BYTE_BUDDY(0, new ByteBuddyProxyModeValidator());
