@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
+import ru.home.logging.util.mode.ProxyMode;
 
 import java.lang.reflect.Method;
 import java.util.Set;

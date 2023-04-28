@@ -5,8 +5,8 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import ru.home.logging.annotation.Logged;
 import ru.home.logging.model.LoggedClassData;
-import ru.home.logging.model.ProxyMode;
-import ru.home.logging.util.ProxyModeResolver;
+import ru.home.logging.util.mode.ProxyMode;
+import ru.home.logging.util.mode.ProxyModeResolver;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static ru.home.logging.model.ProxyMode.DEFAULT;
+import static ru.home.logging.util.mode.ProxyMode.DEFAULT;
 import static ru.home.logging.util.LoggingProxyFactory.createProxy;
 
 /*
@@ -151,8 +151,8 @@ public class LoggingConfigurerBeanPostProcessor implements BeanPostProcessor {
         for (Method method : methods) {
             Logged annotation = method.getAnnotation(Logged.class);
             ProxyMode currentMode = ProxyModeResolver.getProxyMode(annotation);
-            if (proxyMode != DEFAULT && currentMode != DEFAULT) {
-                if (proxyMode != currentMode) {
+            if (proxyMode != DEFAULT) {
+                if (currentMode != DEFAULT && proxyMode != currentMode) {
                     log.warn(
                             "Method {} in class {} must have the same proxyMode in Logged annotation as " +
                             "the other methods. Will use {} as it was found earlier",

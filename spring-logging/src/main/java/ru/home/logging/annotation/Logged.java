@@ -1,6 +1,6 @@
 package ru.home.logging.annotation;
 
-import ru.home.logging.model.ProxyMode;
+import ru.home.logging.util.mode.ProxyMode;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

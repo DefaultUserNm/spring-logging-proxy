@@ -2,7 +2,10 @@ package ru.home.logging.util;
 
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.NotImplementedException;
 import ru.home.logging.model.LoggedClassData;
+import ru.home.logging.util.mode.ProxyMode;
+import ru.home.logging.util.mode.ProxyModeResolver;
 
 import java.lang.reflect.Method;
 import java.util.Collections;
@@ -26,10 +29,12 @@ public class LoggingProxyFactory {
             return null;
         }
         try {
-            return switch (ProxyModeResolver.resolve(data)) {
+            ProxyMode mode = ProxyModeResolver.resolve(data);
+            return switch (mode) {
                 case JDK -> createJdkDynamicProxy(bean, data);
                 case CGLIB -> createCGLibProxy(bean, data);
-                default -> createByteBuddyProxy(bean, data);
+                case BYTE_BUDDY -> createByteBuddyProxy(bean, data);
+                default -> throw new NotImplementedException("Proxy type [" + mode + "] is not supported");
             };
         } catch (Exception ex) {
             log.error("Failed to create proxy object for {}: {}", bean.getClass(), getStackTrace(ex));

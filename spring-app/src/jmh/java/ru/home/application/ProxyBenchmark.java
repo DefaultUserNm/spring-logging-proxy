@@ -10,7 +10,7 @@ import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 import org.openjdk.jmh.infra.Blackhole;
 import ru.home.logging.model.LoggedClassData;
-import ru.home.logging.model.ProxyMode;
+import ru.home.logging.util.mode.ProxyMode;
 import ru.home.logging.util.LoggingProxyFactory;
 
 import java.util.Set;
