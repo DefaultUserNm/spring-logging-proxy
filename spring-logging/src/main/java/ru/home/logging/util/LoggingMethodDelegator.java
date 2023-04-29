@@ -5,13 +5,9 @@ import net.bytebuddy.implementation.bind.annotation.AllArguments;
 import net.bytebuddy.implementation.bind.annotation.Origin;
 import net.bytebuddy.implementation.bind.annotation.RuntimeType;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import static ru.home.logging.util.ProxyInvoker.invokeWithLogging;
-import static ru.home.logging.util.ProxyLogger.logAfter;
-import static ru.home.logging.util.ProxyLogger.logAfterThrowing;
-import static ru.home.logging.util.ProxyLogger.logBefore;
 
 /*
  * @created 22.04.2023
