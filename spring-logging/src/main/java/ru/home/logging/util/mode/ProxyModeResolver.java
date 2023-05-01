@@ -3,14 +3,12 @@ package ru.home.logging.util.mode;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
-import ru.home.logging.annotation.Logged;
-import ru.home.logging.model.LoggedClassData;
+import ru.home.logging.model.LoggedClassMetadata;
 
 import java.util.Comparator;
 import java.util.List;
 
 import static java.util.Arrays.stream;
-import static ru.home.logging.util.mode.ProxyMode.DEFAULT;
 
 /*
  * @created 22.04.2023
@@ -19,14 +17,7 @@ import static ru.home.logging.util.mode.ProxyMode.DEFAULT;
 @Slf4j
 @UtilityClass
 public class ProxyModeResolver {
-    public static ProxyMode getProxyMode(Logged annotation) {
-        ProxyMode proxyMode = annotation.proxyMode();
-        return proxyMode == null
-                ? DEFAULT
-                : proxyMode;
-    }
-
-    public static ProxyMode resolve(LoggedClassData data) {
+    public static ProxyMode resolve(LoggedClassMetadata data) {
         ProxyMode result = null;
         ProxyMode suggested = data.getMode();
         if (suggested.canUse(data)) {

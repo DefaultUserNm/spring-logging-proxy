@@ -53,19 +53,21 @@ class ByteBuddyProxyFactory implements ProxyFactory {
         Junction result = not(isPrivate())
                 .and(not(isFinal()))
                 .and(not(isStatic()));
-
         if (methods != null) {
-            ElementMatcher<? extends MethodDescription> methodMatcher = description -> {
-                for (Method method : methods) {
-                    if (description.represents(method)) {
-                        return true;
-                    }
-                }
-                return false;
-            };
-            result = result.and(methodMatcher);
+            result = result.and(buildMatcherByMethods());
         }
 
         return result;
+    }
+
+    private ElementMatcher<? extends MethodDescription> buildMatcherByMethods() {
+        return description -> {
+            for (Method method : methods) {
+                if (description.represents(method)) {
+                    return true;
+                }
+            }
+            return false;
+        };
     }
 }

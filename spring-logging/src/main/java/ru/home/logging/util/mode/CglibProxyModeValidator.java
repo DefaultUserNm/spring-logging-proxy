@@ -1,6 +1,8 @@
 package ru.home.logging.util.mode;
 
-import ru.home.logging.model.LoggedClassData;
+import ru.home.logging.model.LoggedClassMetadata;
+
+import static java.lang.reflect.Modifier.isFinal;
 
 /*
  * @created 28.04.2023
@@ -9,7 +11,7 @@ import ru.home.logging.model.LoggedClassData;
 public class CglibProxyModeValidator implements ProxyModeValidator {
 
     @Override
-    public boolean canUse(LoggedClassData data) {
-        return true;
+    public boolean canUse(LoggedClassMetadata data) {
+        return !isFinal(data.getOriginalClass().getModifiers());
     }
 }

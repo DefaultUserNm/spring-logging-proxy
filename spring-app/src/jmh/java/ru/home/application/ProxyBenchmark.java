@@ -9,7 +9,7 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 import org.openjdk.jmh.infra.Blackhole;
-import ru.home.logging.model.LoggedClassData;
+import ru.home.logging.model.LoggedClassMetadata;
 import ru.home.logging.util.mode.ProxyMode;
 import ru.home.logging.util.LoggingProxyFactory;
 
@@ -66,7 +66,7 @@ public class ProxyBenchmark {
         try {
             return (TestObject) LoggingProxyFactory.createProxy(
                     object,
-                    LoggedClassData.builder()
+                    LoggedClassMetadata.builder()
                             .originalClass(TestObjectImpl.class)
                             .mode(mode)
                             .methods(Set.of(

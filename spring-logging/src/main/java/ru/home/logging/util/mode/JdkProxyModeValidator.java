@@ -1,7 +1,7 @@
 package ru.home.logging.util.mode;
 
 import lombok.extern.slf4j.Slf4j;
-import ru.home.logging.model.LoggedClassData;
+import ru.home.logging.model.LoggedClassMetadata;
 
 /*
  * @created 28.04.2023
@@ -11,7 +11,7 @@ import ru.home.logging.model.LoggedClassData;
 public class JdkProxyModeValidator implements ProxyModeValidator {
 
     @Override
-    public boolean canUse(LoggedClassData data) {
+    public boolean canUse(LoggedClassMetadata data) {
         for (Class<?> ifc : data.getOriginalClass().getInterfaces()) {
             if (ifc.getMethods().length > 0) {
                 log.debug(

@@ -2,7 +2,7 @@ package ru.home.logging.util.mode;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import ru.home.logging.model.LoggedClassData;
+import ru.home.logging.model.LoggedClassMetadata;
 
 import static java.lang.Integer.MAX_VALUE;
 
@@ -21,7 +21,7 @@ public enum ProxyMode {
     private final Integer priority;
     private final ProxyModeValidator validator;
 
-    public boolean canUse(LoggedClassData data) {
+    public boolean canUse(LoggedClassMetadata data) {
         return this.validator.canUse(data);
     }
 }

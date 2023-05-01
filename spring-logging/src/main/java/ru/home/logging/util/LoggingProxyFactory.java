@@ -3,7 +3,7 @@ package ru.home.logging.util;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.NotImplementedException;
-import ru.home.logging.model.LoggedClassData;
+import ru.home.logging.model.LoggedClassMetadata;
 import ru.home.logging.util.mode.ProxyMode;
 import ru.home.logging.util.mode.ProxyModeResolver;
 
@@ -24,7 +24,7 @@ import static ru.home.logging.util.ProxyInvoker.invokeWithLogging;
 @Slf4j
 @UtilityClass
 public class LoggingProxyFactory {
-    public static Object createProxy(Object bean, LoggedClassData data) {
+    public static Object createProxy(Object bean, LoggedClassMetadata data) {
         if (bean == null) {
             return null;
         }
@@ -42,7 +42,7 @@ public class LoggingProxyFactory {
         }
     }
 
-    private Object createJdkDynamicProxy(Object bean, LoggedClassData data) {
+    private Object createJdkDynamicProxy(Object bean, LoggedClassMetadata data) {
         Set<String> methods = buildMethodKeys(data.getMethods());
         ProxyFactory proxyFactory = new JdkProxyFactory(
                 bean,
@@ -57,7 +57,7 @@ public class LoggingProxyFactory {
         return proxyFactory.createProxy();
     }
 
-    private Object createCGLibProxy(Object bean, LoggedClassData data) {
+    private Object createCGLibProxy(Object bean, LoggedClassMetadata data) {
         Set<String> methods = buildMethodKeys(data.getMethods());
         ProxyFactory proxyFactory = new CGLibProxyFactory(
                 bean,
@@ -71,7 +71,7 @@ public class LoggingProxyFactory {
         return proxyFactory.createProxy();
     }
 
-    private Object createByteBuddyProxy(Object bean, LoggedClassData data) {
+    private Object createByteBuddyProxy(Object bean, LoggedClassMetadata data) {
         ProxyFactory proxyFactory = new ByteBuddyProxyFactory(
                 bean,
                 data.getOriginalClass(),

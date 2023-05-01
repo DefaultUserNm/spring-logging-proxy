@@ -4,9 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import ru.home.logging.annotation.Logged;
-import ru.home.logging.model.LoggedClassData;
+import ru.home.logging.model.LoggedClassMetadata;
 import ru.home.logging.util.mode.ProxyMode;
-import ru.home.logging.util.mode.ProxyModeResolver;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -15,8 +14,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static ru.home.logging.util.mode.ProxyMode.DEFAULT;
 import static ru.home.logging.util.LoggingProxyFactory.createProxy;
+import static ru.home.logging.util.mode.ProxyMode.DEFAULT;
 
 /*
  * @created 13.04.2023
@@ -25,7 +24,7 @@ import static ru.home.logging.util.LoggingProxyFactory.createProxy;
 @Slf4j
 public class LoggingConfigurerBeanPostProcessor implements BeanPostProcessor {
 
-    private final Map<String, LoggedClassData> beanNamesMap = new ConcurrentHashMap<>();
+    private final Map<String, LoggedClassMetadata> beanNamesMap = new ConcurrentHashMap<>();
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
@@ -53,7 +52,7 @@ public class LoggingConfigurerBeanPostProcessor implements BeanPostProcessor {
                 beanName, bean.getClass().getCanonicalName());
 
         Object result = bean;
-        LoggedClassData data = beanNamesMap.get(beanName);
+        LoggedClassMetadata data = beanNamesMap.get(beanName);
         if (data != null) {
             log.debug("Creating logging proxy for bean '{}' - {}", beanName, bean.getClass().getCanonicalName());
             result = createProxy(bean, data);
@@ -76,8 +75,8 @@ public class LoggingConfigurerBeanPostProcessor implements BeanPostProcessor {
                 beanName,
                 bean.getClass().getCanonicalName()
         );
-        LoggedClassData data = LoggedClassData.builder()
-                .mode(ProxyModeResolver.getProxyMode(classAnnotation))
+        LoggedClassMetadata data = LoggedClassMetadata.builder()
+                .mode(classAnnotation.proxyMode())
                 .originalClass(bean.getClass())
                 .build();
         beanNamesMap.put(beanName, data);
@@ -96,7 +95,7 @@ public class LoggingConfigurerBeanPostProcessor implements BeanPostProcessor {
                 bean.getClass().getCanonicalName(),
                 methods
         );
-        LoggedClassData data = LoggedClassData.builder()
+        LoggedClassMetadata data = LoggedClassMetadata.builder()
                 .mode(resolveProxyMode(methods))
                 .originalClass(bean.getClass())
                 .methods(methods)
@@ -149,8 +148,7 @@ public class LoggingConfigurerBeanPostProcessor implements BeanPostProcessor {
     private ProxyMode resolveProxyMode(Set<Method> methods) {
         ProxyMode proxyMode = DEFAULT;
         for (Method method : methods) {
-            Logged annotation = method.getAnnotation(Logged.class);
-            ProxyMode currentMode = ProxyModeResolver.getProxyMode(annotation);
+            ProxyMode currentMode = method.getAnnotation(Logged.class).proxyMode();
             if (proxyMode != DEFAULT) {
                 if (currentMode != DEFAULT && proxyMode != currentMode) {
                     log.warn(
