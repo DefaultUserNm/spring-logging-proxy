@@ -10,16 +10,17 @@ import java.lang.reflect.Proxy;
  * @author alexander
  */
 @RequiredArgsConstructor
-class JdkProxyFactory implements ProxyFactory {
+class JdkProxyFactory<T> implements ProxyFactory<T> {
 
-    private final Object bean;
+    private final T bean;
     private final Class<?> originalClass;
     private final InvocationHandler handler;
     private final MethodSelector methodSelector;
 
+    @SuppressWarnings("unchecked")
     @Override
-    public Object createProxy() {
-        return Proxy.newProxyInstance(
+    public T createProxy() {
+        return (T) Proxy.newProxyInstance(
                 originalClass.getClassLoader(),
                 originalClass.getInterfaces(),
                 buildInvocationHandler()

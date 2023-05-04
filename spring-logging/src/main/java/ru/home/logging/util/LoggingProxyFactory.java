@@ -44,7 +44,7 @@ public class LoggingProxyFactory {
 
     private Object createJdkDynamicProxy(Object bean, LoggedClassMetadata data) {
         Set<String> methods = buildMethodKeys(data.getMethods());
-        ProxyFactory proxyFactory = new JdkProxyFactory(
+        ProxyFactory<?> proxyFactory = new JdkProxyFactory(
                 bean,
                 data.getOriginalClass(),
                 (proxy, method, args) -> invokeWithLogging(bean, data.getClass(), method, args),
@@ -59,7 +59,7 @@ public class LoggingProxyFactory {
 
     private Object createCGLibProxy(Object bean, LoggedClassMetadata data) {
         Set<String> methods = buildMethodKeys(data.getMethods());
-        ProxyFactory proxyFactory = new CGLibProxyFactory(
+        ProxyFactory<?> proxyFactory = new CGLibProxyFactory(
                 bean,
                 data.getOriginalClass(),
                 (obj, method, args, proxy) -> invokeWithLogging(bean, data.getClass(), method, args),
@@ -72,7 +72,7 @@ public class LoggingProxyFactory {
     }
 
     private Object createByteBuddyProxy(Object bean, LoggedClassMetadata data) {
-        ProxyFactory proxyFactory = new ByteBuddyProxyFactory(
+        ProxyFactory<?> proxyFactory = new ByteBuddyProxyFactory(
                 bean,
                 data.getOriginalClass(),
                 new LoggingMethodDelegator(bean),

@@ -24,16 +24,17 @@ import static ru.home.logging.util.ObjectClassUtil.getConstructorFields;
  * @author alexander
  */
 @RequiredArgsConstructor
-class ByteBuddyProxyFactory implements ProxyFactory {
+class ByteBuddyProxyFactory<T> implements ProxyFactory<T> {
 
-    private final Object bean;
+    private final T bean;
     private final Class<?> originalClass;
     private final Object delegate;
     private final Set<Method> methods;
 
+    @SuppressWarnings("unchecked")
     @Override
     @SneakyThrows
-    public Object createProxy() {
+    public T createProxy() {
         Constructor<?>[] constructors = new ByteBuddy()
                 .subclass(originalClass)
                 .method(buildMethodMatcher())
@@ -45,7 +46,7 @@ class ByteBuddyProxyFactory implements ProxyFactory {
         Constructor<?> constructor = chooseConstructor(constructors);
         Object[] constructorFields = getConstructorFields(bean, originalClass, constructor.getParameterTypes());
 
-        return constructor.newInstance(constructorFields);
+        return (T) constructor.newInstance(constructorFields);
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })

@@ -12,22 +12,23 @@ import static ru.home.logging.util.ObjectClassUtil.getConstructorFields;
  * @author alexander
  */
 @RequiredArgsConstructor
-class CGLibProxyFactory implements ProxyFactory {
+class CGLibProxyFactory<T> implements ProxyFactory<T> {
 
-    private final Object bean;
+    private final T bean;
     private final Class<?> originalClass;
     private final MethodInterceptor interceptor;
     private final MethodSelector methodSelector;
 
+    @SuppressWarnings("unchecked")
     @Override
-    public Object createProxy() {
+    public T createProxy() {
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(originalClass);
         enhancer.setCallback(buildMethodInterceptor());
         Class<?>[] argumentTypes = getConstructor(bean).getParameterTypes();
         Object[] constructorFields = getConstructorFields(bean, originalClass, argumentTypes);
 
-        return enhancer.create(argumentTypes, constructorFields);
+        return (T) enhancer.create(argumentTypes, constructorFields);
     }
 
     private MethodInterceptor buildMethodInterceptor() {
