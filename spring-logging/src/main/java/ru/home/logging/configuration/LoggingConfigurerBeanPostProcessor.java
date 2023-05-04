@@ -65,8 +65,9 @@ public class LoggingConfigurerBeanPostProcessor implements BeanPostProcessor {
 
     /**
      * Save class to storage for future proxying
-     * @param bean spring bean currently being processed
-     * @param beanName spring bean name
+     *
+     * @param bean            spring bean currently being processed
+     * @param beanName        spring bean name
      * @param classAnnotation @Logged annotation
      */
     private void storeClass(Object bean, String beanName, Logged classAnnotation) {
@@ -84,9 +85,10 @@ public class LoggingConfigurerBeanPostProcessor implements BeanPostProcessor {
 
     /**
      * Save class with specified methods to storage for future proxying
-     * @param bean spring bean currently being processed
+     *
+     * @param bean     spring bean currently being processed
      * @param beanName spring bean name
-     * @param methods methods which will be logged by proxy
+     * @param methods  methods which will be logged by proxy
      */
     private void storeClass(Object bean, String beanName, Set<Method> methods) {
         log.debug(
@@ -105,6 +107,7 @@ public class LoggingConfigurerBeanPostProcessor implements BeanPostProcessor {
 
     /**
      * Get methods which must be logged by proxy
+     *
      * @param bean spring bean currently being processed
      * @return methods which must be logged by proxy
      */
@@ -126,6 +129,7 @@ public class LoggingConfigurerBeanPostProcessor implements BeanPostProcessor {
 
     /**
      * Get methods declared in current bean class or its superclasses
+     *
      * @param bean spring bean currently being processed
      * @return methods
      */
@@ -142,6 +146,7 @@ public class LoggingConfigurerBeanPostProcessor implements BeanPostProcessor {
 
     /**
      * Resolve proxy mode for class which has method-level @Logged annotation only
+     *
      * @param methods methods which must be logged by proxy
      * @return class proxy mode
      */
