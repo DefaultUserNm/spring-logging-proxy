@@ -15,6 +15,8 @@ jar {
     enabled = false
 }
 
+apply from: "${project.projectDir}/libraries.gradle"
+
 allprojects {
     group = "${projectBasePackage}"
     version = "${projectVersion}"
@@ -22,27 +24,6 @@ allprojects {
     repositories {
         mavenCentral()
     }
-
-    ext.libs = [
-        'springBootStarter': 'org.springframework.boot:spring-boot-starter',
-        'springBootStarterWeb': 'org.springframework.boot:spring-boot-starter-web',
-        'springBootConfigurationProcessor': 'org.springframework.boot:spring-boot-configuration-processor',
-        'springBootStarterJpa': 'org.springframework.boot:spring-boot-starter-data-jpa',
-        'springBootStarterValidation': 'org.springframework.boot:spring-boot-starter-validation',
-        'springKafka': 'org.springframework.kafka:spring-kafka',
-        'springBootStarterTest': 'org.springframework.boot:spring-boot-starter-test',
-
-        'h2': 'com.h2database:h2',
-
-        'lombok': "org.projectlombok:lombok:${lombokVersion}",
-        'mapstruct': "org.mapstruct:mapstruct:${mapstructVersion}",
-
-        'apacheCommonsLang': "org.apache.commons:commons-lang3:${apacheCommonsLangVersion}",
-
-        'logbookSpringBootStarter': "org.zalando:logbook-spring-boot-starter:${logbookVersion}",
-
-        'byteBuddy': "net.bytebuddy:byte-buddy:${byteBuddyVersion}"
-    ]
 
     compileJava {
         options.compilerArgs += [
@@ -70,11 +51,11 @@ subprojects {
 
     dependencies {
         implementation libs.springBootStarterTest
-        testImplementation "org.spockframework:spock-core:${spockVersion}"
-        testImplementation "org.spockframework:spock-spring:${spockVersion}"
-        testImplementation "org.openjdk.jmh:jmh-core:${jmhVersion}"
-        testImplementation "org.openjdk.jmh:jmh-generator-annprocess:${jmhVersion}"
-        jmhAnnotationProcessor "org.openjdk.jmh:jmh-generator-annprocess:${jmhVersion}"
+        testImplementation libs.spockCore
+        testImplementation libs.spockSpring
+        testImplementation libs.jmhCore
+        testImplementation libs.jmhAnnotationProcesor
+        jmhAnnotationProcessor libs.jmhAnnotationProcesor
     }
 
     test {
