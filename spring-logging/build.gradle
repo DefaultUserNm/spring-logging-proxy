@@ -3,17 +3,10 @@ bootJar {
 }
 
 dependencies {
-    // spring boot
     implementation libs.springBootStarter
-
-    // code processing
     implementation libs.lombok
     annotationProcessor libs.lombok
-
-    // utils
     implementation libs.apacheCommonsLang
     implementation libs.logbookSpringBootStarter
-
-    // code manipulation
     implementation libs.byteBuddy
 }
